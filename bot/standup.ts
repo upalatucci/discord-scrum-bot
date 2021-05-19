@@ -7,7 +7,7 @@ interface StandupState {
   scrumMaster: string;
 }
 
-const standupsChannel: Record<Snowflake, StandupState> = {}
+export const standupsChannel: Record<Snowflake, StandupState> = {}
 
 
 
