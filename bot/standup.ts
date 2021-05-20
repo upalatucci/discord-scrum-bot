@@ -1,4 +1,4 @@
-import { Channel, Message, Snowflake, TextChannel, User } from "discord.js"
+import { Channel, Snowflake, TextChannel, User } from "discord.js"
 
 
 interface StandupState {
@@ -7,11 +7,12 @@ interface StandupState {
   scrumMaster: string;
 }
 
-export const standupsChannel: Record<Snowflake, StandupState> = {}
+export let standupsChannel: Record<Snowflake, StandupState> = {}
 
 
 
 export function initStandup(channel: TextChannel, sender: User) {
+  channel.send("Buongiorno a tutti raga! Iniziamo questo standup dai...")
 
   const partecipants: string[] = []
   channel.members.forEach(m => {
@@ -19,19 +20,19 @@ export function initStandup(channel: TextChannel, sender: User) {
       partecipants.push(m.user.username)
   })
 
-
   standupsChannel[channel.id] = {channel, remainingPartecipants: partecipants, scrumMaster: sender.username}
+  popPartecipant(channel)
 }
 
-export function popPartecipant(message: Message) {
-  const {remainingPartecipants, scrumMaster} = standupsChannel[message.channel.id]
+export function popPartecipant(channel: TextChannel) {
+  const {remainingPartecipants, scrumMaster} = standupsChannel[channel.id]
 
   if (remainingPartecipants.length) {
     const randomIndex = Math.round(Math.random() * remainingPartecipants.length) - 1
     const nextUser = remainingPartecipants[randomIndex]
     remainingPartecipants.splice(randomIndex, 1)
-    message.channel.send(`E' il tuo turno ${nextUser}`)
+    channel.send(`Vaaaaa bene. Continuiamo.\nE' il tuo turno ${nextUser}`)
   } else {
-    message.channel.send(`E' finito lo standup. L'ultimo è lo scrum master. Vai ${scrumMaster}`)
+    channel.send(`E' finito lo standup. L'ultimo è lo scrum master. Vai ${scrumMaster}`)
   }
 }

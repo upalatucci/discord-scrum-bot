@@ -1,5 +1,5 @@
 import {Client, TextChannel} from 'discord.js'
-import {prefixCommand, standupCommand} from "./constants"
+import {prefixCommand, standupCommand, continueStandup} from "./constants"
 import {initStandup, popPartecipant} from "./standup"
 
 const client = new Client()
@@ -22,10 +22,10 @@ client.on("message", message => {
 
     switch(command.toLowerCase()) {
       case standupCommand:
-        message.channel.send("Buongiorno a tutti raga! Iniziamo questo standup dai...")
         initStandup(<TextChannel>message.channel, message.author)
-        popPartecipant(message)
         break;
+      case continueStandup:
+        popPartecipant(<TextChannel>message.channel)
       default:
         break;
     }
