@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' bot/index.ts",
-    "start": "tsc bot/index.ts && node bot/index.js",
-    "test": "jest"
+    "start": "node bot/index.js",
+    "test": "jest",
+    "build": "tsc bot/index.ts"
   },
   "keywords": [],
   "author": "",

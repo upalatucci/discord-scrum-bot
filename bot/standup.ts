@@ -27,7 +27,7 @@ export function popPartecipant(message: Message) {
   const {remainingPartecipants, scrumMaster} = standupsChannel[message.channel.id]
 
   if (remainingPartecipants.length) {
-    const randomIndex = Math.random() * remainingPartecipants.length - 1
+    const randomIndex = Math.round(Math.random() * remainingPartecipants.length) - 1
     const nextUser = remainingPartecipants[randomIndex]
     remainingPartecipants.splice(randomIndex, 1)
     message.channel.send(`E' il tuo turno ${nextUser}`)

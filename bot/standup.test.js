@@ -20,7 +20,7 @@ describe("pop partecipants", () => {
 
   it("Pop correctly scrum Master without partecipants", () => {
 
-    standupsChannel[channelId] = {channel: mockChannel, remainingPartecipants: [], scrumMaster: scrumMaster}
+    standupsChannel[channelId] = {channel: mockChannel, remainingPartecipants: [], scrumMaster}
 
     popPartecipant(mockMessage)
 
@@ -32,11 +32,25 @@ describe("pop partecipants", () => {
   it("With Partecipants", () => {
 
     const partecipants = ["hello", "ciao", "baubau"]
-    standupsChannel[channelId] = {channel: mockChannel, remainingPartecipants: partecipants, scrumMaster: scrumMaster}
+    standupsChannel[channelId] = {channel: mockChannel, remainingPartecipants: partecipants, scrumMaster}
+
+    popPartecipant(mockMessage)
+    expect(standupsChannel[channelId].remainingPartecipants.length).toBe(2)
+    popPartecipant(mockMessage)
+    expect(standupsChannel[channelId].remainingPartecipants.length).toBe(1)
+    popPartecipant(mockMessage)
+
+    expect(mockChannel.send).toBeCalledTimes(3)
+    expect(standupsChannel[channelId].remainingPartecipants).toMatchObject([])
+
 
     popPartecipant(mockMessage)
 
-    expect(mockChannel.send).toBeCalledWith("ciao")
+
+    const allcalls = mockChannel.send.mock.calls
+    const message = allcalls[allcalls.length - 1][0]
+    expect(message).toContain(scrumMaster)
+
 
   })
 })
