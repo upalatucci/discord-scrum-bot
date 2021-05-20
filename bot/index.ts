@@ -30,7 +30,7 @@ client.on("message", message => {
       case startPoll:
         initPoll(<TextChannel>message.channel)
       case userVotePoll:
-        votePoll(message)
+        votePoll(message, args.shift())
       default:
         break;
     }

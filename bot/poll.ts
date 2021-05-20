@@ -30,7 +30,7 @@ export function initPoll(channel: TextChannel){
 }
 
 
-export function votePoll(message: Message) {
+export function votePoll(message: Message, voteString) {
   const channel = <DMChannel>message.channel
   const username = channel.recipient.username
 
@@ -48,7 +48,7 @@ export function votePoll(message: Message) {
   if (!pollRecord)
     return
 
-  const vote = parseFloat(message.content)
+  const vote = parseFloat(voteString)
 
   if (vote)
     votes[pollRecord.id].push(vote)
