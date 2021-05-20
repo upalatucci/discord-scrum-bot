@@ -1,5 +1,6 @@
 import {Client, TextChannel} from 'discord.js'
-import {prefixCommand, standupCommand, continueStandup} from "./constants"
+import {prefixCommand, standupCommand, continueStandup, startPoll, userVotePoll} from "./constants"
+import { initPoll, votePoll } from './poll'
 import {initStandup, popPartecipant} from "./standup"
 
 const client = new Client()
@@ -26,6 +27,10 @@ client.on("message", message => {
         break;
       case continueStandup:
         popPartecipant(<TextChannel>message.channel)
+      case startPoll:
+        initPoll(<TextChannel>message.channel)
+      case userVotePoll:
+        votePoll(message)
       default:
         break;
     }
