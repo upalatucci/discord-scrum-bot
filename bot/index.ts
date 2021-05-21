@@ -1,6 +1,6 @@
 import {Client, TextChannel} from 'discord.js'
-import {prefixCommand, standupCommand, continueStandup, startPoll, userVotePoll} from "./constants"
-import { initPoll, votePoll } from './poll'
+import {prefixCommand, standupCommand, continueStandup, startPoll, userVotePoll, endPoll as endPollCommand} from "./constants"
+import { initPoll, votePoll, endPoll} from './poll'
 import {initStandup, popPartecipant} from "./standup"
 
 const client = new Client()
@@ -16,7 +16,6 @@ client.on("message", message => {
 
   if (message.content.startsWith(prefixCommand)) {
     const args = message.content.slice(prefixCommand.length).split(/ +/)
-
     const command = args.shift()
 
     if (!command) return
@@ -31,6 +30,8 @@ client.on("message", message => {
         initPoll(<TextChannel>message.channel)
       case userVotePoll:
         votePoll(message, args.shift())
+      case endPollCommand:
+        endPoll(message.channel.id)
       default:
         break;
     }

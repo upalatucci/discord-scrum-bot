@@ -15,5 +15,5 @@ export function getUsernameFromChannel(channel: TextChannel, sender?: User): str
     if (m.user.username !== sender?.username && userActive(m.user))
       partecipants.push(m.user.username)
   })
-
+  return partecipants
 }
