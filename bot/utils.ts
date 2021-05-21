@@ -1,4 +1,4 @@
-import { Channel, TextChannel, User } from "discord.js"
+import { TextChannel, User } from "discord.js"
 
 
 export function flipCoin(prob: number): boolean {

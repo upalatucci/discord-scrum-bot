@@ -1,5 +1,5 @@
 import { Channel, Snowflake, TextChannel, User } from "discord.js"
-import { flipCoin, getUsernameFromChannel, userActive } from "./utils"
+import { flipCoin, getUsernameFromChannel } from "./utils"
 
 
 interface StandupState {

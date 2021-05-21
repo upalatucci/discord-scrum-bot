@@ -26,12 +26,16 @@ client.on("message", message => {
         break;
       case continueStandup:
         popPartecipant(<TextChannel>message.channel)
+        break;
       case startPoll:
         initPoll(<TextChannel>message.channel)
+        break;
       case userVotePoll:
         votePoll(message, args.shift())
+        break;
       case endPollCommand:
         endPoll(message.channel.id)
+        break;
       default:
         break;
     }
