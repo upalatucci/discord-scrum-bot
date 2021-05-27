@@ -23,10 +23,14 @@ let usersPolls: Record<string, PollRecord[]> = {}
 
 let activePolls: Record<Snowflake, IActivePoll> = {}
 
-export function initPoll(channel: TextChannel){
-  channel.send("Ragazzi votiamo questa storia!\nSe volete nascondere il voto, scrivetemi in DM.")
-
+export async function initPoll(channel: TextChannel){
   const partecipants = getUsernameFromChannel(channel)
+  console.log("Init Poll for channel", channel.name, "partecipants: ", partecipants)
+
+  if (!partecipants.length)
+    return channel.send("Non ho trovato partecipanti alla poll")
+  else 
+    channel.send("Ragazzi votiamo questa storia!\nSe volete nascondere il voto, scrivetemi in DM.")
 
   partecipants.forEach(username => {
     const newPoll = {name: channel.name, id: channel.id }
@@ -53,6 +57,9 @@ export function votePoll(message: Message, voteString: string | undefined) {
   const username = message.author.username
   const userPolls = usersPolls[username]
 
+  if (!userPolls)
+    return message.author.send("Non ci sono votazioni in corso per te!")
+
   let pollRecord
 
   if (isDM) {
@@ -66,16 +73,17 @@ export function votePoll(message: Message, voteString: string | undefined) {
     }
 
     pollRecord = userPollsNotVoted[0]
+
+    if (!pollRecord) {
+      return message.author.send("Non hai nessuna votazione attiva al momento")
+    }
   } else {
     pollRecord = userPolls.find(p => p.id === message.channel.id)
 
-    if (pollRecord) {
-      message.channel.send("In questo canale non è attiva una votazione")
+    if (!pollRecord) {
+      return message.channel.send("In questo canale non è attiva una votazione")
     }
   }
-
-  if (!pollRecord)
-    return
 
   const voteFloat = parseFloat(voteString)
 
@@ -95,7 +103,10 @@ function avgVote(votes: UserVote[]) {
 }
 
 function formatVotes(votes: UserVote[]) {
-  return votes.reduce((acc, v) => acc + `\n${v.user}: ${v.vote}`, "")
+  const avg = avgVote(votes)
+  const userVotes = votes.reduce((acc, v) => acc + `\n${v.user}: ${v.vote}`, "")
+
+  return userVotes + `\nMedia: ${avg}`
 }
 
 function deleteAllUsersPolls(poll: IActivePoll) {
@@ -112,9 +123,8 @@ export function endPoll(channelId: Snowflake) {
   const poll = activePolls[channelId]
   if (poll && poll.votes.length) {
     const avg = avgVote(poll.votes)
-    let votesFormatted = formatVotes(poll.votes)
+    const  votesFormatted = formatVotes(poll.votes)
 
-    votesFormatted += `\nMedia: ${avg}`
     poll.channel.send(`La votazione si è conclusa!\n${votesFormatted}`)
 
     deleteAllUsersPolls(poll)

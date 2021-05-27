@@ -1,5 +1,6 @@
-import {Client, TextChannel} from 'discord.js'
-import {prefixCommand, standupCommand, continueStandup, startPoll, userVotePoll, endPoll as endPollCommand} from "./constants"
+import {Client, DMChannel, TextChannel} from 'discord.js'
+import {prefixCommand, standupCommand, continueStandup, startPoll, userVotePoll, endPoll as endPollCommand, jokes} from "./constants"
+import { getRandomJokes } from './jokes'
 import { initPoll, votePoll, endPoll} from './poll'
 import {initStandup, popPartecipant} from "./standup"
 
@@ -36,6 +37,8 @@ client.on("message", message => {
       case endPollCommand:
         endPoll(message.channel.id)
         break;
+      case jokes:
+        getRandomJokes(<DMChannel>message.channel)
       default:
         break;
     }

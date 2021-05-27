@@ -6,7 +6,13 @@ export function flipCoin(prob: number): boolean {
 }
 
 export function userActive(user: User){
-  return !user.bot && user.presence.status !== 'offline'
+  return !user.bot
+}
+
+
+export function randomMessage(messages: string[]) {
+  const randomIndex = Math.floor(Math.random() * messages.length)
+  return messages[randomIndex]
 }
 
 export function getUsernameFromChannel(channel: TextChannel, sender?: User): string[] {
